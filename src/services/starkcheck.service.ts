@@ -10,7 +10,7 @@ export const silentConnectWallet = async () => {
 }
 
 export const connectWallet = async () => {
-  const _windowStarknet = await connect({modalTheme: "light"})
+  const _windowStarknet = await connect({ modalTheme: "light" })
   windowStarknet = _windowStarknet
   return windowStarknet ?? undefined
 }
@@ -43,7 +43,7 @@ export const chainId = (provider?: ProviderInterface): string | undefined => {
       throw Error("no provider")
     }
     return shortString.decodeShortString(provider.chainId)
-  } catch {}
+  } catch { }
 }
 
 export const signMessage = async (message: string) => {
