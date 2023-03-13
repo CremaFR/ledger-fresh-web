@@ -1,22 +1,18 @@
-import Head from 'next/head'
-import styles from '@/styles/Home.module.css'
-import { useState, useEffect } from 'react'
-import { connectWallet, walletAddress } from '@/services/starkcheck.service'
+import Head from "next/head";
+import styles from "@/styles/Home.module.css";
+import { useState, useEffect } from "react";
+import { connectWallet, walletAddress } from "@/services/starkcheck.service";
 
 export default function Home() {
+  const [isConnected, setConnected] = useState(false);
+  const [address, setAddress] = useState<string | undefined>("");
 
-  const [isConnected, setConnected] = useState(false)
-  const [address, setAddress] = useState<string | undefined>("")
-
-  let chain: string = "1234567890"
-  //let address: string = "0xdeadbabedeadbabe"
+  let chain: string = "1234567890";
 
   async function handleConnectClick(s: string) {
-    console.log(s)
-    const wallet = await connectWallet()
-    console.log(wallet)
-    setConnected(!!wallet?.isConnected)
-    const addr = await walletAddress()
+    const wallet = await connectWallet();
+    setConnected(!!wallet?.isConnected);
+    const addr = await walletAddress();
     setAddress(addr);
   }
 
@@ -50,5 +46,5 @@ export default function Home() {
         )}
       </main>
     </div>
-  )
+  );
 }
