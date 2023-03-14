@@ -3,6 +3,8 @@ import { ProviderInterface, shortString } from "starknet";
 
 export let windowStarknet: StarknetWindowObject | null = null;
 
+const starkcheck_url = process.env.NEXT_PUBLIC_STARKCHECK_API_ENDPOINT;
+
 export const silentConnectWallet = async () => {
   const _windowStarknet = await connect({ modalMode: "neverAsk" });
   windowStarknet = _windowStarknet;
@@ -19,7 +21,20 @@ export const walletAddress = async (): Promise<string | undefined> => {
   if (!windowStarknet?.isConnected) {
     return;
   }
-  return windowStarknet.selectedAddress;
+  return "0x038b6f1f5e39f5965a28ff2624ab941112d54fe71b8bf1283f565f5c925566c0";
+  // return windowStarknet.selectedAddress;
+};
+
+export const getPolicies = async (): Promise<string | undefined> => {
+  if (!windowStarknet?.isConnected) {
+    return;
+  }
+  const addr = await walletAddress();
+  return fetch(`${starkcheck_url}/starkchecks/getPolicies/${addr}`).then(
+    (response) => response.json()
+  );
+
+  // return windowStarknet.selectedAddress;
 };
 
 export const addToken = async (address: string): Promise<void> => {

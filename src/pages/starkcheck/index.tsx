@@ -1,7 +1,11 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { useState, useEffect } from "react";
-import { connectWallet, walletAddress } from "@/services/starkcheck.service";
+import {
+  connectWallet,
+  getPolicies,
+  walletAddress,
+} from "@/services/starkcheck.service";
 
 export default function Home() {
   const [isConnected, setConnected] = useState(false);
@@ -14,6 +18,8 @@ export default function Home() {
     setConnected(!!wallet?.isConnected);
     const addr = await walletAddress();
     setAddress(addr);
+    const policies = await getPolicies();
+    console.log(policies);
   }
 
   return (
