@@ -1,0 +1,49 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 95vh;
+}
+
+.bg {
+  position: absolute;
+  width: 25%;
+  height: 18%;
+  left: 28%;
+  top: 17%;
+  background-color: #7ba3ef;
+  filter: blur(72px);
+}
+
+.bg2 {
+  position: absolute;
+  width: 185px;
+  height: 122px;
+  left: 55%;
+  top: 50%;
+  background-color: #7ba3ef;
+  filter: blur(72px);
+}
+
+.main {
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 5rem;
+  font-weight: 600;
+}
+.main h1 {
+  font-weight: 600;
+}
+
+.buttonRow {
+  padding: 2rem;
+}
+
+.emboarding_button {
+  margin-bottom: 1rem;
+}
