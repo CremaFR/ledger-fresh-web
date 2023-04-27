@@ -153,5 +153,14 @@ html.grabbing * {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 95vh;
+  min-height: 90vh;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
 }
