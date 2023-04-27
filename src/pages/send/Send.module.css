@@ -1,0 +1,37 @@
+.badgeContainer {
+  outline: 1px solid rgb(var(--color-gray-200));
+  padding: 0.25em 0.5em;
+  border-radius: 10px;
+}
+
+.amount {
+  font-size: 4rem;
+  margin-top: 1rem;
+  margin-bottom: -0.2em;
+  background-color: transparent;
+  text-align: center;
+}
+
+.label {
+  color: rgb(var(--color-gray-500));
+}
+
+.address {
+  font-size: 12px;
+  width: 100%;
+  outline: 1px solid rgb(var(--color-gray-200));
+  border-radius: 10px;
+  padding: 1em;
+  margin-top: 5rem;
+
+  background-color: transparent;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+}
+
+.footer .sendButton {
+  width: 33%;
+}

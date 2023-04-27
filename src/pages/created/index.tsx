@@ -1,26 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./Created.module.css";
-import { Button } from "@/components/Button";
+import { LinkButton } from "@/components/Button";
+import Main from "@/components/MainContainer";
 
-import { getKeyCredentialCreationOptions } from "@/utils/webauthn";
-import Image from "next/image";
-import Link from "next/link";
-
-export default function Home() {
+export default function Created() {
   const [username, setUsername] = useState<string>("");
 
-  // @TODO componentWillMount is still something that exist????
-  // const credential = await navigator.credentials.get();
+  useEffect(() => {
+    const name = localStorage.getItem("walletName") || "";
+    setUsername(name);
+  }, []);
 
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
+    <div className="page">
+      <Main variant="centered">
         <div className={styles.thumbnail}></div>
-        <h2> Satoshigangsta created!</h2>
-      </main>
+        <h2> {username} created!</h2>
+      </Main>
       <div className={styles.buttonRow}>
         {/* eslint-disable-next-line */}
-        <Button>Let's go</Button>
+        <LinkButton href={"/"}>Let's go</LinkButton>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import Head from "next/head";
 import clsx from "clsx";
 import styles from "./Onboarding.module.css";
 import { Button, LinkButton } from "@/components/Button";
+import Main from "@/components/MainContainer";
 
 export default function Onboarding() {
   return (
@@ -14,10 +15,10 @@ export default function Onboarding() {
       </Head>
       <div className={clsx(styles.bg)}></div>
       <div className={clsx(styles.bg2)}></div>
-      <div className={clsx(styles.page)}>
-        <main className={styles.main}>
+      <div className="page">
+        <Main variant="centered" className={styles.main}>
           <h1>Welcome to Ledger Fresh</h1>
-        </main>
+        </Main>
         <div className={styles.buttonRow}>
           <LinkButton
             href="/create"
@@ -26,7 +27,7 @@ export default function Onboarding() {
           >
             Create a new wallet
           </LinkButton>
-          <LinkButton href="/import" variant="subtle">
+          <LinkButton href="/" variant="subtle">
             I already have a wallet
           </LinkButton>
         </div>

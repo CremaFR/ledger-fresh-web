@@ -1,7 +1,30 @@
 import Head from "next/head";
+import Image from "next/image";
+
+import { useState, useEffect } from "react";
 import styles from "@/styles/Home.module.css";
+import Main from "@/components/MainContainer";
+import { Header } from "@/components/Header";
+import { LinkButton, Button } from "@/components/Button";
+import {
+  getAccounts,
+  WalletAccount,
+} from "@/services/accountStorage/account.storage";
+import { TokenList } from "@/components/TokenList";
+import TabBar from "@/components/TabBar/TabBar";
+import { AddLedgerCard } from "@/components/Card";
 
 export default function Home() {
+  const [account, setAccount] = useState<WalletAccount>();
+
+  useEffect(() => {
+    const accounts = getAccounts();
+    if (accounts.length) {
+      console.log(accounts);
+      setAccount(accounts[0]);
+    }
+  }, []);
+
   return (
     <>
       <Head>
@@ -12,11 +35,60 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <h1>Ledger Fresh</h1>
-        </div>
-      </main>
+      <Header />
+      <div className="page">
+        {account ? (
+          <Main variant="left">
+            <div className={styles.buttonRow}>
+              <Button variant="secondary" disabled>
+                Fund
+              </Button>
+              <LinkButton href={"/send"} variant="secondary">
+                Send
+              </LinkButton>
+            </div>
+            <br />
+            <TokenList account={account} />
+          </Main>
+        ) : (
+          <footer className={styles.footer}>
+            <LinkButton href={"/onboarding"}>Onboarding</LinkButton>
+          </footer>
+        )}
+        <section>
+          <AddLedgerCard />
+          <TabBar initialActiveIndex={0}>
+            <Image
+              src="/Icons/wallet.svg"
+              alt="back"
+              width={20}
+              height={20}
+              priority
+            />
+            <Image
+              src="/Icons/clock.svg"
+              alt="back"
+              width={20}
+              height={20}
+              priority
+            />
+            <Image
+              src="/Icons/planet.svg"
+              alt="back"
+              width={20}
+              height={20}
+              priority
+            />
+            <Image
+              src="/Icons/power.svg"
+              alt="back"
+              width={20}
+              height={20}
+              priority
+            />
+          </TabBar>
+        </section>
+      </div>
     </>
   );
 }

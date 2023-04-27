@@ -1,12 +1,27 @@
 import { useState } from "react";
 import styles from "./Webauthn.module.css";
 import { Button } from "@/components/Button";
+import Main from "@/components/MainContainer";
 import { getKeyCredentialCreationOptions } from "@/utils/webauthn";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { create } from "@github/webauthn-json/browser-ponyfill";
+import { addAccount } from "@/services/accountStorage/account.storage";
+import { addTransaction } from "@/services/transactionStorage/transaction.storage";
 
-export default function Home() {
+function ArrayBufferToString(
+  buffer: Buffer,
+  encoding: BufferEncoding | undefined
+) {
+  if (encoding == null) encoding = "utf8";
+
+  return Buffer.from(buffer).toString(encoding);
+}
+
+const network: any = process.env.NEXT_PUBLIC_NETWORK || "goerli-alpha";
+
+export default function Webauthn() {
   const [username, setUsername] = useState<string>("");
   const router = useRouter();
 
@@ -37,10 +52,41 @@ export default function Home() {
       );
 
       // create the credential
-      const credential = await navigator.credentials.create(options);
-      console.log(credential);
+      const credentials = await create(options);
+
+      if (!credentials) throw "";
+      if (!options.publicKey) throw "";
+
+      // @ts-ignore
+      const pubKeyBrut = credentials.response.getPublicKey();
+      const pubKey = ArrayBufferToString(
+        pubKeyBrut.slice(pubKeyBrut.byteLength - 65),
+        "hex"
+      );
+
+      const res: { accountAddress: string; transaction_hash: string } =
+        await fetch("/api/deployer/deploy", {
+          method: "POST",
+          body: pubKey,
+        }).then((response) => response.json());
+
+      addAccount({
+        networkId: network,
+        name: username,
+        address: res.accountAddress,
+        authenticatorId: credentials.id,
+      });
+
+      addTransaction({
+        networkId: network,
+        hash: res.transaction_hash,
+        type: 1,
+        data: [res.accountAddress],
+        hidden: true,
+      });
 
       router.push("/created");
+
       /**
        * @TODO redirect */
 
@@ -57,8 +103,8 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
+    <div className="page">
+      <Main>
         <Link href="/create" className={styles.icon}>
           <Image
             src="/Icons/arrow-left-rtl.svg"
@@ -69,8 +115,10 @@ export default function Home() {
           />
         </Link>
         <label htmlFor="username">
-          <h2>Give a name to your wallet</h2>
-          <p>This name will be only displayed to you and stored locally.</p>
+          <h2 className={styles.title}>Give a name to your wallet</h2>
+          <p className={styles.subtitle}>
+            This name will be only displayed to you and stored locally.
+          </p>
         </label>
         <input
           className={styles.input}
@@ -80,7 +128,7 @@ export default function Home() {
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Wallet name"
         />
-      </main>
+      </Main>
       <div className={styles.buttonRow}>
         <Button variant={username ? "primary" : "secondary"} onClick={register}>
           Create a new wallet

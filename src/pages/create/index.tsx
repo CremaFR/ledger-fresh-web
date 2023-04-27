@@ -1,14 +1,14 @@
-import clsx from "clsx";
 import styles from "./Create.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { LinkCard } from "@/components/Card";
+import Main from "@/components/MainContainer";
 
 export default function Create() {
   return (
     <>
-      <div className={clsx(styles.page)}>
-        <main className={styles.main}>
+      <div className="page">
+        <Main variant="left">
           <Link href="/onboarding" className={styles.icon}>
             <Image
               src="/Icons/arrow-left-rtl.svg"
@@ -46,8 +46,7 @@ export default function Create() {
                 priority
               />
             }
-          ></LinkCard>
-
+          />
           <h5 className={styles.title_separator}>OR use a portable signer</h5>
           <div className={styles.cardList}>
             <LinkCard
@@ -73,7 +72,7 @@ export default function Create() {
                   priority
                 />
               }
-            ></LinkCard>
+            />
             <LinkCard
               href="/create/ledger"
               title="With a Ledger"
@@ -93,13 +92,13 @@ export default function Create() {
                   src="/Images/ledger.png"
                   alt="back"
                   width={90}
-                  height={2}
+                  height={90}
                   priority
                 />
               }
-            ></LinkCard>
+            />
           </div>
-        </main>
+        </Main>
       </div>
     </>
   );
