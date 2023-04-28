@@ -14,20 +14,53 @@ import { TokenList } from "@/components/TokenList";
 import TabBar from "@/components/TabBar/TabBar";
 import { AddLedgerCard } from "@/components/Card";
 import { useRouter } from "next/router";
+import { addTransaction } from "@/services/transactionStorage/transaction.storage";
+import { useNotificationContext } from "@/services/notificationProvider";
 
 export default function Home() {
   const [account, setAccount] = useState<WalletAccount>();
   const router = useRouter();
+  const { setNotification } = useNotificationContext();
 
   useEffect(() => {
     const accounts = getAccounts();
     if (accounts.length) {
-      console.log(accounts);
       setAccount(accounts[0]);
     } else {
       router.push("/onboarding");
     }
   }, []);
+
+  async function requestFund() {
+    if (!account) return;
+    const res = await fetch("/api/deployer/fund", {
+      method: "POST",
+      body: JSON.stringify({
+        address: account.address,
+      }),
+    });
+    const body: any = await res.json();
+
+    if (res.status != 200) {
+      setNotification({
+        networkId: account.networkId,
+        hash: body.transaction_hash,
+        type: 99,
+        data: [body.transaction_hash],
+        hidden: false,
+      });
+      return;
+    }
+    const notif = {
+      networkId: account.networkId,
+      hash: body.transaction_hash,
+      type: 21,
+      data: [],
+      hidden: false,
+    };
+    setNotification(notif);
+    addTransaction(notif);
+  }
 
   return (
     <>
@@ -44,7 +77,7 @@ export default function Home() {
         {account ? (
           <Main variant="left">
             <div className={styles.buttonRow}>
-              <Button variant="secondary" disabled>
+              <Button variant="secondary" onClick={() => requestFund()}>
                 Fund
               </Button>
               <LinkButton href={"/send"} variant="secondary">
