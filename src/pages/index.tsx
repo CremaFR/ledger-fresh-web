@@ -21,6 +21,7 @@ export default function Home() {
   const [account, setAccount] = useState<WalletAccount>();
   const router = useRouter();
   const { setNotification } = useNotificationContext();
+
   useEffect(() => {
     const accounts = getAccounts();
     if (accounts.length) {
